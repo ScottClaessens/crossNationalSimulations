@@ -1,9 +1,11 @@
 name|type|data|command|depend|seed|path|time|size|bytes|format|repository|iteration|parent|children|seconds|warnings|error
-linguistic_proximity_file|stem|9e2d7d4ae07adc4a|127293be01e0c5d2|2c530c1562a7fbd1|-137838778||t20060.7086036099s|edb5491f686fb474|82|rds|local|vector|||0||
+cors|stem|eb501c847aed6650|b94b6a7cd7ce15a7|03f034931e7309a4|-1966071726||t20060.7232729577s|720360fe11fb37b2|220|rds|local|vector|||0||
+geographic_proximity|stem|72f39e10282643c4|e558da186cca5d83|ff2e1d9f1e22bc4b|-82889013||t20060.7086067073s|26198ec773d574d6|152026|rds|local|vector|||0.032||
 geographic_proximity_file|stem|c3b7527887f74bc2|8b2f1c720ed5b97c|2c530c1562a7fbd1|-237049604||t20060.7086040288s|edb5491f686fb474|82|rds|local|vector|||0||
+get_correlations|function|14cd742d65a7e644|||||||||||||||
+linguistic_proximity|stem|fc30c6cd016d3fda|3443466e4a5e081e|fc280e43e1227a4c|1582823934||t20060.7086059608s|749c8d0571b1f7ef|122621|rds|local|vector|||0.047||
+linguistic_proximity_file|stem|9e2d7d4ae07adc4a|127293be01e0c5d2|2c530c1562a7fbd1|-137838778||t20060.7086036099s|edb5491f686fb474|82|rds|local|vector|||0||
+religious_proximity|stem|13fd2611839ccc3f|f7a9d0dcce1ea15f|cb66a062097112c4|-413038619||t20060.7086080954s|a37aeb546d2d9dbf|149235|rds|local|vector|||0.032||
+religious_proximity_dow|stem|ae6ff78524f869f5|be15602b73c48d05|c3cf12090963fa48|1291248106||t20060.7086074636s|f93131ad321817f6|15850|rds|local|vector|||0.016||
 religious_proximity_dow_file|stem|5ca42959f642eb05|8bf161c96baf894f|2c530c1562a7fbd1|2137524923||t20060.7086044458s|afe1c0564fcfafab|85|rds|local|vector|||0||
 religious_proximity_file|stem|8ac2782330ad4258|695a26d8be3582d1|2c530c1562a7fbd1|-1708848411||t20060.7086049517s|4179e472436f3418|81|rds|local|vector|||0||
-linguistic_proximity|stem|fc30c6cd016d3fda|3443466e4a5e081e|fc280e43e1227a4c|1582823934||t20060.7086059608s|749c8d0571b1f7ef|122621|rds|local|vector|||0.047||
-geographic_proximity|stem|72f39e10282643c4|e558da186cca5d83|ff2e1d9f1e22bc4b|-82889013||t20060.7086067073s|26198ec773d574d6|152026|rds|local|vector|||0.032||
-religious_proximity_dow|stem|ae6ff78524f869f5|be15602b73c48d05|c3cf12090963fa48|1291248106||t20060.7086074636s|f93131ad321817f6|15850|rds|local|vector|||0.016||
-religious_proximity|stem|13fd2611839ccc3f|f7a9d0dcce1ea15f|cb66a062097112c4|-413038619||t20060.7086080954s|a37aeb546d2d9dbf|149235|rds|local|vector|||0.032||
