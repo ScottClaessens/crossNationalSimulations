@@ -59,9 +59,12 @@ list(
   # set up analysis model with religious covariance
   tar_target(analysis_model, setup_analysis_model(sim_data_0.2_0.2[[1]],
                                                   religious_proximity)),
-  # simulation
+  # run simulation
   tar_target(iter, 1:100),
   sim_targets,
   tar_combine(sim_fit, sim_targets[["sim_fit"]]),
-  tar_target(sim_fit_summary, summarise_simulation_results(sim_fit))
+  # get summary of simulation results
+  tar_target(sim_fit_summary, summarise_simulation_results(sim_fit)),
+  # plot simulation results
+  tar_target(plot, plot_simulation_results(sim_fit_summary))
 )
