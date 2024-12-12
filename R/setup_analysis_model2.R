@@ -1,6 +1,6 @@
 # function to set up brms model controlling for religious proximity
 # adapted from https://github.com/ScottClaessens/crossNationalCorrelations
-setup_analysis_model <- function(data, religious_proximity) {
+setup_analysis_model2 <- function(data, religious_proximity) {
   # remove hong kong and puerto rico from matrix and dataset
   # as no data on religious proximity in these two countries
   religious_proximity <- 

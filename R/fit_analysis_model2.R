@@ -1,7 +1,7 @@
 # function to fit analysis model and return slope
 # adapted from https://github.com/ScottClaessens/crossNationalCorrelations
-fit_analysis_model <- function(sim_data, analysis_model, 
-                               religious_proximity, lambda, rho, iter) {
+fit_analysis_model2 <- function(sim_data, analysis_model2, 
+                                religious_proximity, lambda, rho, iter) {
   # remove hong kong and puerto rico from matrix and dataset
   # as no data on religious proximity in these two countries
   religious_proximity <- 
@@ -12,7 +12,7 @@ fit_analysis_model <- function(sim_data, analysis_model,
   religious_covariance <- as.matrix(Matrix::nearPD(religious_proximity)$mat)
   # fit model
   fit <- update(
-    object = analysis_model,
+    object = analysis_model2,
     newdata = sim_data,
     data2 = list(A = religious_covariance),
     control = list(adapt_delta = 0.99),
@@ -22,6 +22,7 @@ fit_analysis_model <- function(sim_data, analysis_model,
     )
   # extract statistics
   tibble(
+    model  = "Analysis using religious proximity matrix from ARDA",
     rho    = rho,
     lambda = lambda,
     iter   = iter,

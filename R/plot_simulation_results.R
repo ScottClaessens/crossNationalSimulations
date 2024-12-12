@@ -1,9 +1,16 @@
 # function to plot results of simulation
 plot_simulation_results <- function(sim_fit_summary) {
   # plot
-  out <- 
+  out <-
+    sim_fit_summary %>%
+    mutate(
+      model = ifelse(
+        model == "Analysis without controls",
+        "Analysis\nwithout controls",
+        "Analysis using religious\nproximity matrix from ARDA"
+      )
+    ) %>%
     ggplot(
-      data = sim_fit_summary,
       mapping = aes(
         x = lambda,
         y = false_positives,
@@ -24,6 +31,10 @@ plot_simulation_results <- function(sim_fit_summary) {
     geom_line(
       position = position_dodge(0.08)
       ) +
+    facet_wrap(
+      . ~ fct_rev(model),
+      scales = "free_y"
+      ) +
     scale_x_continuous(
       name = "Strength of autocorrelation for outcome variable",
       limits = c(0.1, 0.9),
@@ -39,16 +50,17 @@ plot_simulation_results <- function(sim_fit_summary) {
         title = "Strength of\nautocorrelation\nfor predictor\nvariable"
         )
       ) +
-    ggtitle(
-      "Simulation with religious covariance (Dow)",
-      subtitle = "Analysis with religious covariance (ARDA)"
-      ) +
-    theme_classic()
+    ggtitle("Simulation using religious proximity matrix from Dow") +
+    theme_classic() +
+    theme(
+      strip.background = element_blank(),
+      strip.text = element_text(size = 10)
+      )
   # save
   ggsave(
     filename = "plots/simulation_results.pdf",
     plot = out,
-    width = 5.5,
+    width = 6.5,
     height = 3.5
   )
   return(out)
