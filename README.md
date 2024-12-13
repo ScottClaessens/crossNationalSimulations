@@ -8,7 +8,7 @@ To run this code, you will need to [install R](https://www.r-project.org/) and
 the following R packages:
 
 ```
-install.packages(c("brms", "targets"))
+install.packages(c("crew", "brms", "Matrix", "rstan", "targets", "tarchetypes"))
 ```
 
 ### Executing code
