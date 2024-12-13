@@ -4,8 +4,8 @@ library(targets)
 library(tarchetypes)
 library(tidyverse)
 tar_option_set(
-  packages = c("brms", "Matrix", "rstan", "tidyverse"),
-  controller = crew_controller_local(workers = 2)
+  packages = c("brms", "Matrix", "rstan", "tidyverse")#,
+  #controller = crew_controller_local(workers = 2)
   )
 tar_source()
 
@@ -29,10 +29,14 @@ sim_targets <-
     ),
     # fit models and extract slopes
     tar_target(
-      sim_fit,
-      fit_analysis_model(
-        sim_data, analysis_model, religious_proximity,
-        lambda, rho, iter
+      sim_fit1,
+      fit_analysis_model1(sim_data, analysis_model1, lambda, rho, iter),
+      pattern = map(sim_data, iter)
+    ),
+    tar_target(
+      sim_fit2,
+      fit_analysis_model2(
+        sim_data, analysis_model2, religious_proximity, lambda, rho, iter
       ),
       pattern = map(sim_data, iter)
     )
@@ -56,15 +60,20 @@ list(
     get_correlations(geographic_proximity, linguistic_proximity,
                      religious_proximity, religious_proximity_dow)
     ),
+  # set up "no controls" analysis model
+  tar_target(analysis_model1, setup_analysis_model1(sim_data_0.2_0.2[[1]])),
   # set up analysis model with religious covariance
-  tar_target(analysis_model, setup_analysis_model(sim_data_0.2_0.2[[1]],
-                                                  religious_proximity)),
+  tar_target(analysis_model2, setup_analysis_model2(sim_data_0.2_0.2[[1]],
+                                                    religious_proximity)),
   # run simulation
   tar_target(iter, 1:100),
   sim_targets,
-  tar_combine(sim_fit, sim_targets[["sim_fit"]]),
+  tar_combine(sim_fit1, sim_targets[["sim_fit1"]]),
+  tar_combine(sim_fit2, sim_targets[["sim_fit2"]]),
   # get summary of simulation results
-  tar_target(sim_fit_summary, summarise_simulation_results(sim_fit)),
+  tar_target(sim_fit_summary, summarise_simulation_results(sim_fit1, sim_fit2)),
   # plot simulation results
-  tar_target(plot, plot_simulation_results(sim_fit_summary))
+  tar_target(plot, plot_simulation_results(sim_fit_summary)),
+  # render manuscript
+  tar_render(manuscript, "manuscript.Rmd")
 )

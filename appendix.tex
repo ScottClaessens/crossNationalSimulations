@@ -1,0 +1,123 @@
+\newpage
+
+\section*{Supplementary Information}
+
+\subsection*{Data-generating model for simulations}
+
+Following the approach in our initial article (Claessens et al., 2023), we 
+simulated data for 150 nations $i$ with varying degrees of religious 
+autocorrelation for outcome $y$ and predictor $x$ using the following
+generative model:
+
+\begin{align}
+\begin{bmatrix}y_i\\x_i \end{bmatrix} &\sim \text{MVNormal}
+\begin{pmatrix}\begin{bmatrix}\alpha_y\\\alpha_x \end{bmatrix},
+\textbf{S}\end{pmatrix} \nonumber \\
+\alpha_y &\sim \text{Normal}(0, \sqrt{\lambda} \cdot \Sigma_\text{Dow}) 
+\nonumber \\
+\alpha_x &\sim \text{Normal}(0, \sqrt{\rho} \cdot \Sigma_\text{Dow}) 
+\nonumber \\
+\textbf{S} &= 
+\begin{pmatrix}\sqrt{1 - \lambda} & 0 \\ 0 & \sqrt{1 - \rho} \end{pmatrix}
+\begin{pmatrix}1 & r \\ r & 1\end{pmatrix}
+\begin{pmatrix}\sqrt{1 - \lambda} & 0 \\ 0 & \sqrt{1 - \rho} \end{pmatrix} 
+\nonumber
+\end{align}
+
+In this generative model, $\Sigma_\text{Dow}$ is the national-level religious
+proximity matrix that Wolfer and Koplenig (2024) constructed using data from Dow
+and Karunaratna (2006). In addition, $\lambda$ and $\rho$ are autocorrelation 
+parameters that represent the expected religious "signal" for outcome and 
+predictor variables, respectively, and $r$ is the true cross-national 
+correlation between the variables after accounting for religious
+autocorrelation. We set $\lambda$ and $\rho$ to 0.2 (weak), 0.5 (moderate), or 
+0.8 (strong). For simplicity, we always set $r = 0$ in this simulation. For each
+parameter combination, we simulated 100 datasets, resulting in 900 datasets.
+
+\subsection*{Analysis without controls}
+
+We first analysed the simulated data without any control variables. The
+statistical model is as follows:
+
+\begin{align}
+y_i &\sim \text{Normal}(\mu_i, \sigma) \nonumber \\
+\mu_i &= \alpha + \beta x_i \nonumber \\
+\alpha &\sim \text{Normal}(0, 0.5) \nonumber \\
+\beta &\sim \text{Normal}(0, 0.5) \nonumber \\
+\sigma &\sim \text{Exponential}(5) \nonumber
+\end{align}
+
+We fitted each model using the \textit{brms} package (Bürkner, 2017) with four 
+chains, 1000 warmup samples, and 1000 post-warmup samples. We calculated the 
+false positive rate as the proportion of $\beta$ slopes with 95\% credible 
+intervals excluding zero.
+
+\subsection*{Analysis using alternative religious proximity matrix}
+
+For our next analysis, we used a religious proximity matrix of countries from 
+Kyritsis et al. (2022). This matrix is based on national-level data on religious
+adherence from the Association of Religion Data Archives (ARDA) together with a
+family tree representing genealogical relationships between 28 religious
+lineages, informed by historical sources. Since there is evidence for horizontal
+transmission between some lineages, eight different cladograms were considered,
+representing alternative paths of inheritance between lineages. For further
+details on the construction of these religious family trees, see Kyritsis et al.
+(2022).
+
+For each of the eight cladograms, a pairwise distance matrix was generated based
+on patristic distances between religious traditions. These distances were then 
+converted to proximities and weighted by adherent percentages from ARDA 
+using the following formula (Eff, 2008):
+
+\[R_{rk} = \sum_{r} \sum_{k} p_{ik} p_{jr} s_{ij}\]
+
+where $R_{rk}$ is the religious connection between countries $r$ and $k$,
+$p_{ik}$ is the percentage of the population in country $k$ adhering to religion
+$i$, $p_{jr}$ is the percentage of the population in country $r$ adhering to 
+religion $j$, and $s_{ij}$ is the religious proximity measure between religions
+$i$ and $j$. The resulting eight matrices were averaged to produce the final
+matrix, which we label $\Sigma_\text{ARDA}$.
+
+We then included this $\Sigma_\text{ARDA}$ matrix in the statistical model 
+above, allowing nation random effects to covary according to alternative
+religious proximities. The statistical model is as follows:
+
+\begin{align}
+y_{i} &\sim \text{Normal}(\mu_{i},\sigma) \nonumber \\
+\mu_{i} &= \alpha + z_{\text{NATION}[i]}\sigma_{\alpha}\Sigma_\text{ARDA} + 
+\beta x_{i} \nonumber \\
+\alpha &\sim \text{Normal}(0, 0.5) \nonumber \\
+\beta &\sim \text{Normal}(0, 0.5) \nonumber \\
+z_{j} &\sim \text{Normal}(0, 1) \nonumber \\
+\sigma_{\alpha} &\sim \text{Exponential}(5) \nonumber \\
+\sigma &\sim \text{Exponential}(5) \nonumber
+\end{align}
+
+We fitted each model using the \textit{brms} package (Bürkner, 2017) with four 
+chains, 1000 warmup samples, and 1000 post-warmup samples. We calculated the 
+false positive rate as the proportion of $\beta$ slopes with 95\% credible 
+intervals excluding zero.
+
+\subsection*{Supplementary References}
+
+Bürkner, P. brms: An R package for Bayesian multilevel models using Stan. 
+\textit{Journal of Statistical Software} \textbf{80}, 1-28 (2017).
+
+Claessens, S., Kyritsis, T. \& Atkinson, Q. D. Cross-national analyses require 
+additional controls to account for the non-independence of nations.
+\textit{Nature Communications} \textbf{14}, 5776 (2023).
+
+Dow, D. \& Karunaratna, A. Developing a multidimensional instrument to measure 
+psychic distance stimuli. \textit{Journal of International Business Studies}
+\textbf{37}, 578-602 (2006).
+
+Eff, E. A. Weight matrices for cultural proximity: Deriving weights from a 
+language phylogeny. \textit{Structure and Dynamics} \textbf{3} (2008).
+
+Kyritsis, T., Matthews, L. J., Welch, D. \& Atkinson, Q. D. Shared cultural 
+ancestry predicts the global diffusion of democracy. \textit{Evolutionary Human 
+Sciences} \textbf{4}, e42 (2022).
+
+Wolfer, S. \& Koplenig, A. Leakage explains the apparent superiority of Bayesian
+random effect models - a preregistered comment on Claessens, Kyritsis and 
+Atkinson (2023). (2024) doi:10.31219/osf.io/ex267.

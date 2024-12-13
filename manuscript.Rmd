@@ -1,0 +1,185 @@
+---
+title: "Controls for non-independence should reflect the data-generating process"
+author:
+  - Scott Claessens^[School of Psychology, University of Auckland; School of Psychology, University of Kent; scott.claessens@gmail.com]
+  - Thanos Kyritsis^[School of Psychology, University of Auckland]
+  - Quentin D Atkinson^[School of Psychology, University of Auckland]
+date: "`r format(Sys.time(), '%B %d, %Y')`"
+output:
+  bookdown::pdf_document2:
+    toc: false
+    fig_caption: yes
+    keep_tex: yes
+    latex_engine: pdflatex
+    includes:
+      after_body: appendix.tex
+fontfamily: mathpazo
+fontsize: 11pt
+geometry: margin = 1in
+header-includes:
+  - \usepackage{setspace}\doublespacing
+  - \usepackage[left]{lineno}
+  - \nolinenumbers
+  - \usepackage{dcolumn}
+  - \usepackage{caption}
+  - \usepackage{afterpage}
+  - \usepackage{siunitx}
+  - \usepackage{amsmath}
+bibliography: references.bib
+csl: nature.csl
+---
+
+```{r setup, echo=FALSE}
+targets::tar_load(c(cors, plot))
+```
+
+\linenumbers
+
+In our article[@Claessens2023], we simulated national-level trait data with 
+non-independence due to spatial diffusion or shared language ancestry. These are
+plausible scenarios from which we can evaluate the ability of different methods
+to recover the "true" cross-national correlation. We used these simulations to
+evaluate the performance of widely-used statistical controls for
+non-independence and showed that these methods do not result in a satisfactory
+reduction in false positives. This finding holds and is concerning regardless of
+our ability to identify an alternative class of models that performs better. We
+then further showed that Bayesian random effects models incorporating explicit 
+assumptions about the data-generating process do indeed perform much better. In
+particular, the Bayesian model controlling for spatial proximity was most 
+effective at reducing false positives in spatially non-independent data, and the
+Bayesian model controlling for linguistic proximity was most effective at
+reducing false positives in "language tree" non-independent data.
+
+In their Matters Arising, Wolfer and Koplenig[@Wolfer2024] (henceforth W&K) seem
+to imply that we conclude from this simulation that models controlling for 
+spatial and linguistic proximity should _always_ outperform alternatives and 
+should therefore _always_ be the models of choice when analysing autocorrelated
+cross-national data. To rebut this claim, W&K simulate cross-national data with
+another form of non-independence: autocorrelation due to shared religious
+ancestry. From these simulation results, W&K argue that models controlling for
+spatial and linguistic proximity are no more effective at reducing false
+positives compared to models with alternative controls. W&K conclude that our
+original simulation results were due purely to a methodological artefact that
+they label "data leakage", where the same covariance matrix is used to generate
+and analyse the data.
+
+To be clear, we never claimed that models controlling for spatial and linguistic
+proximity should always be the model of choice when analysing cross-national
+data. In fact, we explicitly caution against this in our article: "we did not
+simulate other sources of non-independence that potentially exist in real
+cross-national datasets... additional controls will be required to ensure that
+these sources of non-independence do not confound cross-national
+inferences"[@Claessens2023] (p. 8).
+
+We expand on this point here. Instead of being used as a one-size-fits-all 
+recipe, controls for non-independence should reflect the data-generating process
+for the particular dataset at hand. As we would expect, if you simulate data
+with one source of non-independence and run regressions controlling for a 
+different source of non-independence, the performance will be affected. In our 
+own simulations, for example, we already showed that controls for spatial 
+proximity did not necessarily deal with linguistic non-independence, and 
+controls for linguistic proximity did not necessarily deal with spatial 
+non-independence.
+
+The same is true for the simulations from W&K. While we agree that there is a
+relationship between linguistic and religious traits, the covariation implied by
+these two forms of cultural ancestry are different, resulting in only a moderate
+correlation between linguistic and religious proximities in nations around the
+world (_r_ =
+`r format(round(cors["linguistic_proximity","religious_proximity_dow"], 2), nsmall = 2)`)
+and an even weaker correlation between spatial and religious proximities (_r_ =
+`r format(round(cors["geographic_proximity","religious_proximity_dow"], 2), nsmall = 2)`).
+Given these differences, it is no surprise that models controlling for spatial
+and linguistic proximity do not eliminate false positives when dealing with
+autocorrelation due to religious ancestry. Space and language are poor proxy
+controls for religion.
+
+It is interesting though that the costs of getting this wrong are not huge.
+While models controlling for spatial and linguistic proximity fail to
+completely eliminate false positives in the religious-autocorrelation
+simulations from W&K, they still arguably perform just as well, if not better,
+compared to the original models we tested. For example, the Bayesian models
+controlling for linguistic proximity are the only models that are able to
+eliminate false positives when there is weak autocorrelation on the predictor
+variable (the red line in W&K's Figure 1).
+
+We thank W&K for highlighting that we used the same matrices for generating and 
+analysing data in our simulations. While we assumed this was obvious, in 
+hindsight, we could have gone to greater lengths to emphasise this feature of 
+our analysis to readers. However, we do not think "data leakage" is the right 
+label for this. This label is often used in the context of machine learning and 
+other predictive modelling, where information from a training dataset is 
+unintentionally incorporated into a test dataset that the model is later used to 
+predict[@Kaufman2012]. There was no such unintentional "leakage" in our article.
+We used simulated data to evaluate the performance of different causal inference
+models, including versions of the actual data-generating model, against a known
+ground truth. This is a standard design feature of simulation-based model
+validation in the causal inference literature[@Pearl2000;@McElreath2020] and not
+"leakage".
+
+The broader lesson here is that researchers need to deal with non-independence
+in their national-level datasets, and when we do, our decisions must be informed
+by our causal understanding of the processes at work, not the application of a 
+one-size-fits-all recipe. W&K are right to note that the data-generating process
+is often uncertain to researchers, especially with observational national-level
+data. But the fact that we may not be able to precisely specify this process
+does not justify resorting to simpler methods that we know do not capture the
+process.
+
+There are several ways that researchers can deal with their uncertainty about
+the true data-generating process. First, researchers can try including multiple
+matrices in the analysis, as we did in our simulations, with little or no cost
+in false positives or loss of power. Since the random effects models scale the
+relative importance of different matrices according to the amount of "signal" in
+the data, it often does not hurt to include multiple matrices in the analysis, 
+provided that these are motivated by a plausible model of the data-generating
+process.
+
+Second, researchers can integrate over their uncertainty in the data-generating
+process. For example, cultural phylogenetic analyses often average over 
+uncertainty in the language ancestry that is thought to have created 
+autocorrelation in the data, iterating the model over many samples from a 
+posterior set of language phylogenies[@Sheehan2023;@Watts2016].
+
+```{r plot, fig.cap="Results from additional simulations using an alternative religious proximity matrix to analyse the data. False positive rates were operationalised as the proportion of models that estimated a slope with a 95% credible interval excluding zero. Points represent raw proportions of false positives out of 100 models, ranges represent 95% bootstrap confidence intervals (n = 1000 bootstrap samples), and dashed lines indicate the 5% false positive rate that is expected due to chance. Colours indicate whether the strength of autocorrelation for the predictor variable is 0.2 (red), 0.5, (green) or 0.8 (blue). ARDA = Association of Religion Data Archives.", echo=FALSE, fig.height=3.5, fig.width=6.5}
+plot
+```
+
+Third, researchers can use an approximation of the data-generating process. In
+the case of religious ancestry, for example, our simulation results still stand
+when we use _different_ matrices to generate and analyse the data, so long as
+those matrices approximate the same underlying process (i.e., not a different
+process like linguistic ancestry). To show this, we repeat the simulations from
+W&K but use an alternative religious proximity matrix to analyse the simulated
+datasets. This alternative religious proximity matrix was created using data 
+from the Association of Religion Data Archives[@Brown2018;@Kyritsis2022] (see 
+Supplementary Information). The matrix has higher resolution than W&K's matrix
+and is more strongly correlated with W&K's matrix (_r_ =
+`r format(round(cors["religious_proximity","religious_proximity_dow"], 2), nsmall = 2)`)
+than language or geography. Our simulations with this alternative matrix show 
+that valid approximations of the true data-generating process can effectively 
+reduce false positive rates, even when the covariance matrices used to generate
+and analyse the data are not identical (Figure \@ref(fig:plot)).
+
+As a final point, while we agree that these Bayesian random effects models can 
+take a long time to run when iterated across hundreds of simulated datasets, we 
+note that, contrary to the claims from W&K, _individual_ models in our 
+simulation took no longer than a minute to sample on a standard laptop.
+
+\nolinenumbers
+
+\subsection*{Data availability}
+
+Data on geographic, linguistic, and religious proximity can be found on
+GitHub: https://github.com/ScottClaessens/crossNationalSimulations
+
+\subsection*{Code availability}
+
+The code necessary to reproduce our simulations and generate the manuscript can
+be found on GitHub: https://github.com/ScottClaessens/crossNationalSimulations
+
+\subsection*{Competing interests}
+
+The authors declare no competing interests.
+
+# References
