@@ -75,5 +75,10 @@ list(
   # plot simulation results
   tar_target(plot, plot_simulation_results(sim_fit_summary)),
   # render manuscript
-  tar_render(manuscript, "manuscript.Rmd")
+  tar_render(manuscript, "manuscript.Rmd"),
+  # print session info for reproducibility
+  tar_target(
+    sessionInfo,
+    writeLines(capture.output(sessionInfo()), "sessionInfo.txt")
+    )
 )

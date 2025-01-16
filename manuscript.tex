@@ -110,7 +110,7 @@
 
 \title{Controls for non-independence should reflect the data-generating process}
 \author{Scott Claessens\footnote{School of Psychology, University of Auckland; School of Psychology, University of Kent; \href{mailto:scott.claessens@gmail.com}{\nolinkurl{scott.claessens@gmail.com}}} \and Thanos Kyritsis\footnote{School of Psychology, University of Auckland} \and Quentin D Atkinson\footnote{School of Psychology, University of Auckland}}
-\date{December 13, 2024}
+\date{January 16, 2025}
 
 \begin{document}
 \maketitle
@@ -410,6 +410,14 @@ chains, 1000 warmup samples, and 1000 post-warmup samples. We calculated the
 false positive rate as the proportion of $\beta$ slopes with 95\% credible 
 intervals excluding zero.
 
+\subsection*{Description of code functionality}
+
+The R code in our GitHub repository uses the \textit{targets} package
+(Landau, 2021) to create the analysis pipeline for this manuscript. The code 
+loads the proximity matrices, calculates the correlations between these
+matrices, runs the simulations, plots the results of the simulations, and
+reproducibly generates the manuscript file.
+
 \subsection*{Supplementary References}
 
 Bürkner, P. brms: An R package for Bayesian multilevel models using Stan. 
@@ -429,6 +437,10 @@ language phylogeny. \textit{Structure and Dynamics} \textbf{3} (2008).
 Kyritsis, T., Matthews, L. J., Welch, D. \& Atkinson, Q. D. Shared cultural 
 ancestry predicts the global diffusion of democracy. \textit{Evolutionary Human 
 Sciences} \textbf{4}, e42 (2022).
+
+Landau, W. M. The targets R package: a dynamic Make-like function-oriented
+pipeline toolkit for reproducibility and high-performance computing.
+\text{Journal of Open Source Software} \textbf{6}, 2959 (2021).
 
 Wolfer, S. \& Koplenig, A. Leakage explains the apparent superiority of Bayesian
 random effect models - a preregistered comment on Claessens, Kyritsis and 
